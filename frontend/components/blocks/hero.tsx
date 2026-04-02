@@ -79,12 +79,18 @@ export function Hero() {
         transition={{ duration: 1.2, delay: 0.8, ease: customEase }}
         className="relative z-10 mt-24 w-full max-w-4xl mx-auto"
       >
-        {/* Glow behind the card */}
-        <div className="absolute -inset-8 bg-dark-contrast/5 rounded-[40px] blur-[60px] pointer-events-none" />
+        {/* Glow behind the card — wide, soft, feathered */}
+        <div className="absolute -inset-24 bg-dark-contrast/6 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="relative bg-dark-contrast/95 backdrop-blur-xl rounded-3xl border border-white/[0.08] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.25)]">
+        <div
+          className="relative bg-dark-contrast/95 backdrop-blur-xl rounded-3xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)]"
+          style={{
+            maskImage: "linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
+          }}
+        >
           {/* Subtle top highlight */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
           <div className="p-8 md:p-10">
             {/* Terminal header dots */}
@@ -128,7 +134,7 @@ export function Hero() {
       </motion.div>
 
       {/* Bottom fade — blends card into next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-canvas-primary to-transparent pointer-events-none z-20" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-canvas-primary via-canvas-primary/60 to-transparent pointer-events-none z-20" />
     </section>
   );
 }
