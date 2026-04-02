@@ -79,20 +79,24 @@ export function Hero() {
         transition={{ duration: 1.2, delay: 0.8, ease: customEase }}
         className="relative z-10 mt-24 w-full max-w-4xl mx-auto"
       >
-        {/* Glow behind the card — wide, soft, feathered */}
-        <div className="absolute -inset-24 bg-dark-contrast/6 rounded-full blur-[120px] pointer-events-none" />
-
+        {/* Layer 1: Floor Reflection — simulates terminal light hitting the canvas */}
         <div
-          className="relative bg-dark-contrast/95 backdrop-blur-xl rounded-3xl shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)]"
+          className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[800px] h-[200px] bg-dark-contrast/15 blur-[100px] pointer-events-none"
+          style={{ transform: "translateX(-50%) translateY(40%)" }}
+        />
+
+        {/* The terminal card — multi-stop mask for smooth dissolve */}
+        <div
+          className="relative bg-dark-contrast/95 backdrop-blur-xl rounded-t-3xl rounded-b-none"
           style={{
-            maskImage: "linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.5) 75%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 50%, rgba(0,0,0,0.5) 75%, transparent 100%)",
           }}
         >
           {/* Subtle top highlight */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
-          <div className="p-8 md:p-10">
+          <div className="p-8 md:p-10 pb-16 md:pb-20">
             {/* Terminal header dots */}
             <div className="flex items-center gap-2 mb-6">
               <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
@@ -103,21 +107,25 @@ export function Hero() {
               </span>
             </div>
 
-            {/* Animated protocol lines */}
+            {/* Animated protocol lines — opacity decreases down */}
             <div className="space-y-3">
               <ProtocolLine delay={1.0} label="provider_agent" status="connected" />
               <ProtocolLine delay={1.2} label="fhir_bundler" status="assembling" detail="12 resources" />
               <ProtocolLine delay={1.4} label="payer_rules_engine" status="evaluating" detail="criteria: met" />
-              <ProtocolLine delay={1.6} label="a2a_negotiation" status="active" detail="COIN protocol" />
-              <ProtocolLine delay={1.8} label="determination" status="approved" detail="47.2s" />
+              <div className="opacity-70">
+                <ProtocolLine delay={1.6} label="a2a_negotiation" status="active" detail="COIN protocol" />
+              </div>
+              <div className="opacity-40">
+                <ProtocolLine delay={1.8} label="determination" status="approved" detail="47.2s" />
+              </div>
             </div>
 
-            {/* Bottom status bar */}
+            {/* Bottom status bar — faded */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2.2, duration: 0.6, ease: customEase }}
-              className="mt-8 pt-6 border-t border-white/[0.06] flex items-center justify-between"
+              className="mt-8 pt-6 border-t border-white/[0.04] flex items-center justify-between opacity-30"
             >
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -131,10 +139,15 @@ export function Hero() {
             </motion.div>
           </div>
         </div>
-      </motion.div>
 
-      {/* Bottom fade — blends card into next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-canvas-primary via-canvas-primary/60 to-transparent pointer-events-none z-20" />
+        {/* Layer 2: Foreground Fog — canvas color rising up to obscure bottom */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-1/2 pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(to top, #F9F9F6 0%, #F9F9F6cc 20%, transparent 100%)",
+          }}
+        />
+      </motion.div>
     </section>
   );
 }

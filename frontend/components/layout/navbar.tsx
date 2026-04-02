@@ -23,17 +23,16 @@ export function Navbar() {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 pointer-events-none"
     >
       <nav
         className={`
-          flex items-center justify-between
+          pointer-events-auto flex items-center justify-between rounded-full
           transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
-          will-change-[max-width,border-radius,background-color,box-shadow,padding,margin]
           ${
             scrolled
-              ? "mt-3 max-w-5xl w-[94%] h-14 px-4 pl-6 gap-6 rounded-full bg-canvas-elevated/65 backdrop-blur-2xl border border-black/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.06)]"
-              : "mt-0 max-w-7xl w-full h-16 px-8 gap-8 rounded-none bg-canvas-primary/80 backdrop-blur-xl border-b border-black/5"
+              ? "w-[90%] max-w-4xl h-14 px-4 pl-6 gap-6 bg-canvas-elevated/70 backdrop-blur-2xl border border-black/[0.06] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.06)]"
+              : "w-[90%] max-w-5xl h-14 px-6 pl-8 gap-8 bg-canvas-elevated/40 backdrop-blur-xl border border-black/[0.04]"
           }
         `}
       >
