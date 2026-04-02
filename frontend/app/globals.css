@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@import "@xyflow/react/dist/style.css";
+
+:root {
+  --canvas-primary: #F9F9F6;
+  --canvas-elevated: #FFFFFF;
+  --dark-contrast: #1A2F24;
+  --text-primary: #2D2D2D;
+  --text-secondary: #6B7280;
+  --soft-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.04);
+}
+
+@theme inline {
+  /* Colors */
+  --color-canvas-primary: var(--canvas-primary);
+  --color-canvas-elevated: var(--canvas-elevated);
+  --color-dark-contrast: var(--dark-contrast);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+
+  /* Fonts */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: var(--canvas-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* Overture soft shadow utility */
+.shadow-soft {
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.04);
+}
+
+/* Overture global easing */
+.ease-overture {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* React Flow overrides — strip defaults for dark diagram */
+.react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  width: auto !important;
+}
+
+.react-flow__pane {
+  cursor: default !important;
+}
+
+.react-flow__attribution {
+  display: none !important;
+}
+
+.react-flow__handle {
+  background: transparent !important;
+  border: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.react-flow__edge-path {
+  stroke: rgba(26, 47, 36, 0.15) !important;
+  stroke-width: 2px !important;
+}
