@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
 const navLinks = [
@@ -36,8 +37,15 @@ export function Navbar() {
           }
         `}
       >
-        <a href="/" className="font-display text-xl tracking-tight text-primary shrink-0">
-          Overture
+        <a href="/" className="shrink-0 flex items-center">
+          <Image
+            src="/overture-logo.png"
+            alt="Overture"
+            width={120}
+            height={36}
+            className="h-7 w-auto"
+            priority
+          />
         </a>
 
         <ul className="hidden md:flex items-center gap-6 shrink-0">
