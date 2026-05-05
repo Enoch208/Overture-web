@@ -1,0 +1,36 @@
+{
+  "organization": {
+    "name": "Meridian Specialty Pharmacy",
+    "npi": "1487532984",
+    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127"]
+  },
+  "scenarios": [
+    {
+      "id": "labetalol_backorder",
+      "inventory": {
+        "labetalol 200mg": {"in_stock": false, "backorder_until": "2026-05-18", "pa_required": false},
+        "nifedipine ER 30mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 12},
+        "methyldopa 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 18}
+      },
+      "narrative": "Labetalol on manufacturer backorder until 2026-05-18. Nifedipine ER and methyldopa are stocked alternatives — both first-line for postpartum hypertension per ACOG."
+    },
+    {
+      "id": "nifedipine_pa",
+      "inventory": {
+        "labetalol 200mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
+        "nifedipine ER 30mg": {"in_stock": true, "pa_required": true, "pa_reason": "Plan formulary requires labetalol trial first"},
+        "methyldopa 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 18}
+      },
+      "narrative": "Labetalol available without PA. Nifedipine ER requires prior auth (formulary step therapy). Recommend labetalol as first line."
+    },
+    {
+      "id": "delivery_constrained",
+      "inventory": {
+        "labetalol 200mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
+        "nifedipine ER 30mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 12}
+      },
+      "delivery_window": {"earliest": "2026-05-05T16:00:00Z", "latest": "2026-05-05T20:00:00Z", "reason": "Same-day courier slot — only afternoon window available"},
+      "narrative": "Stock available, but same-day delivery is restricted to a 4–8 PM window."
+    }
+  ]
+}

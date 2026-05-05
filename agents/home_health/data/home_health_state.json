@@ -1,0 +1,38 @@
+{
+  "organization": {
+    "name": "Beacon Home Health Services",
+    "npi": "1932074521",
+    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127", "02130", "02132"],
+    "services_offered": ["postpartum_visit", "bp_monitoring", "lactation_support", "wound_care", "dme_delivery", "skilled_nursing"]
+  },
+  "scenarios": [
+    {
+      "id": "afternoon_only",
+      "narrative": "Service area covered. Same-day BP cuff delivery available, but only in a 4–6 PM window. Postpartum nurse visit available within 24h.",
+      "windows": [
+        {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-05T16:00:00Z", "latest": "2026-05-05T18:00:00Z"},
+        {"service": "postpartum_visit", "earliest": "2026-05-06T09:00:00Z", "latest": "2026-05-06T17:00:00Z"},
+        {"service": "lactation_support", "earliest": "2026-05-07T10:00:00Z", "latest": "2026-05-07T16:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "next_day_only",
+      "narrative": "Same-day capacity exhausted. Next-day delivery and visit available. Out-of-area zips referred to partner agency.",
+      "windows": [
+        {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-06T14:00:00Z"},
+        {"service": "postpartum_visit", "earliest": "2026-05-06T13:00:00Z", "latest": "2026-05-06T18:00:00Z"}
+      ],
+      "caseload_status": "limited"
+    },
+    {
+      "id": "out_of_area",
+      "narrative": "Patient zip outside primary service area. Referral to partner agency required for in-home services. DME can still be couriered same-day.",
+      "windows": [
+        {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T20:00:00Z"}
+      ],
+      "caseload_status": "referral_required",
+      "partner_agency": "Crescent Home Care Network"
+    }
+  ]
+}
