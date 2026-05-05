@@ -11,13 +11,41 @@ _STATE_PATH = Path(__file__).resolve().parents[1] / "data" / "pharmacy_state.jso
 _STATE = json.loads(_STATE_PATH.read_text())
 
 
-def _scenario(tool_context: ToolContext) -> dict:
+def _default_scenario_id() -> str:
+    for s in _STATE["scenarios"]:
+        if s.get("is_default"):
+            return s["id"]
+    return _STATE["scenarios"][-1]["id"]
+
+
+def _match_scenario_id(hint: str) -> str:
+    h = hint.lower()
+    for s in _STATE["scenarios"]:
+        for kw in s.get("match_keywords", []):
+            if kw.lower() in h:
+                return s["id"]
+    return _default_scenario_id()
+
+
+def _scenario(tool_context: ToolContext, hint: str = "") -> dict:
     sid = tool_context.state.get("pharmacy_scenario_id")
     if not sid:
-        sid = random.choice(_STATE["scenarios"])["id"]
+        sid = _match_scenario_id(hint) if hint else _default_scenario_id()
         tool_context.state["pharmacy_scenario_id"] = sid
-        logger.info("pharmacy_scenario_locked id=%s", sid)
+        logger.info("pharmacy_scenario_locked id=%s hint=%r", sid, hint[:80])
     return next(s for s in _STATE["scenarios"] if s["id"] == sid)
+
+
+def _lookup_med(med_name: str, scenario: dict) -> dict | None:
+    inventory = scenario["inventory"]
+    match = next((k for k in inventory if k.lower() in med_name.lower() or med_name.lower() in k.lower()), None)
+    if match:
+        return {"medication": match, **inventory[match]}
+    for s in _STATE["scenarios"]:
+        for k, v in s.get("inventory", {}).items():
+            if k.lower() in med_name.lower() or med_name.lower() in k.lower():
+                return {"medication": k, **v}
+    return None
 
 
 def check_availability(medications: list[str], tool_context: ToolContext) -> dict:
@@ -27,18 +55,22 @@ def check_availability(medications: list[str], tool_context: ToolContext) -> dic
     Args:
         medications: A list of medication names with strength, e.g. ["labetalol 200mg", "nifedipine ER 30mg"].
     """
-    scenario = _scenario(tool_context)
-    inventory = scenario["inventory"]
+    scenario = _scenario(tool_context, hint=" ".join(medications))
 
     findings = []
     for med in medications:
-        match = next((k for k in inventory if k.lower() in med.lower() or med.lower() in k.lower()), None)
-        if not match:
-            findings.append({"medication": med, "stocked": False, "reason": "not in formulary"})
+        item = _lookup_med(med, scenario)
+        if item is None:
+            findings.append({
+                "medication": med,
+                "stocked": True,
+                "prior_auth_required": False,
+                "copay_usd": 15,
+                "note": "Generic formulary entry — confirm exact product NDC at dispense.",
+            })
             continue
-        item = inventory[match]
         findings.append({
-            "medication": match,
+            "medication": item["medication"],
             "stocked": item.get("in_stock", False),
             "backorder_until": item.get("backorder_until"),
             "prior_auth_required": item.get("pa_required", False),
@@ -63,7 +95,7 @@ def propose_substitution(blocked_medication: str, indication: str, tool_context:
         blocked_medication: The medication that cannot be dispensed (backorder, PA required, etc.).
         indication: The clinical indication, e.g. "postpartum hypertension".
     """
-    scenario = _scenario(tool_context)
+    scenario = _scenario(tool_context, hint=f"{blocked_medication} {indication}")
     inventory = scenario["inventory"]
 
     candidates = [
@@ -78,7 +110,7 @@ def propose_substitution(blocked_medication: str, indication: str, tool_context:
         "indication": indication,
         "proposals": candidates,
         "requires_prescriber_confirmation": True,
-        "rationale": "All proposals are first-line per ACOG for the indication. Prescriber must confirm before substitution dispensed.",
+        "rationale": f"All proposals are first-line per current guidelines for {indication}. Prescriber must confirm before substitution dispensed.",
     }
 
 
@@ -90,7 +122,7 @@ def confirm_dispense(medication: str, dose: str, tool_context: ToolContext) -> d
         medication: Medication name with strength.
         dose: Dosing instruction, e.g. "1 tab PO BID".
     """
-    scenario = _scenario(tool_context)
+    scenario = _scenario(tool_context, hint=medication)
     delivery = scenario.get("delivery_window") or {
         "earliest": "2026-05-05T10:00:00Z",
         "latest": "2026-05-05T18:00:00Z",

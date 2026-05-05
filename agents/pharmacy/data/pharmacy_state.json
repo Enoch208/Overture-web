@@ -2,35 +2,125 @@
   "organization": {
     "name": "Meridian Specialty Pharmacy",
     "npi": "1487532984",
-    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127"]
+    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127", "02130", "02132", "02134"]
   },
   "scenarios": [
     {
-      "id": "labetalol_backorder",
+      "id": "postpartum_hypertension",
+      "match_keywords": ["labetalol", "nifedipine", "methyldopa", "preeclampsia", "postpartum", "prenatal", "puerperium"],
       "inventory": {
         "labetalol 200mg": {"in_stock": false, "backorder_until": "2026-05-18", "pa_required": false},
         "nifedipine ER 30mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 12},
-        "methyldopa 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 18}
+        "methyldopa 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 18},
+        "prenatal multivitamin": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 5}
       },
-      "narrative": "Labetalol on manufacturer backorder until 2026-05-18. Nifedipine ER and methyldopa are stocked alternatives — both first-line for postpartum hypertension per ACOG."
+      "narrative": "Labetalol on manufacturer backorder until 2026-05-18. Nifedipine ER and methyldopa stocked alternatives — both first-line per ACOG for postpartum hypertension."
     },
     {
-      "id": "nifedipine_pa",
+      "id": "cardiac_anticoagulation",
+      "match_keywords": ["warfarin", "apixaban", "eliquis", "rivaroxaban", "xarelto", "dabigatran", "atrial fibrillation", "afib", "pulmonary embolism", "dvt", "stroke prevention"],
       "inventory": {
-        "labetalol 200mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
-        "nifedipine ER 30mg": {"in_stock": true, "pa_required": true, "pa_reason": "Plan formulary requires labetalol trial first"},
-        "methyldopa 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 18}
+        "warfarin 5mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "apixaban 5mg": {"in_stock": true, "pa_required": true, "pa_reason": "Plan formulary requires warfarin trial first"},
+        "rivaroxaban 20mg": {"in_stock": true, "pa_required": true, "pa_reason": "Step therapy required — INR-stable warfarin trial"},
+        "metoprolol succinate 50mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 6}
       },
-      "narrative": "Labetalol available without PA. Nifedipine ER requires prior auth (formulary step therapy). Recommend labetalol as first line."
+      "narrative": "Apixaban and rivaroxaban require prior auth (formulary step therapy — warfarin must be trialed first). Warfarin and metoprolol stocked without PA."
     },
     {
-      "id": "delivery_constrained",
+      "id": "heart_failure",
+      "match_keywords": ["furosemide", "lasix", "spironolactone", "carvedilol", "lisinopril", "losartan", "sacubitril", "entresto", "heart failure", "hfref", "hfpef", "cardiomyopathy", "pulmonary edema"],
       "inventory": {
-        "labetalol 200mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
-        "nifedipine ER 30mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 12}
+        "furosemide 40mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 3},
+        "carvedilol 12.5mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
+        "lisinopril 10mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "spironolactone 25mg": {"in_stock": false, "backorder_until": "2026-05-15", "pa_required": false},
+        "sacubitril-valsartan 49-51mg": {"in_stock": true, "pa_required": true, "pa_reason": "Specialty tier — NYHA II-IV documentation required"}
       },
-      "delivery_window": {"earliest": "2026-05-05T16:00:00Z", "latest": "2026-05-05T20:00:00Z", "reason": "Same-day courier slot — only afternoon window available"},
-      "narrative": "Stock available, but same-day delivery is restricted to a 4–8 PM window."
+      "narrative": "Spironolactone on backorder until 2026-05-15. Sacubitril-valsartan (Entresto) is specialty tier requiring NYHA documentation. Standard GDMT components stocked."
+    },
+    {
+      "id": "orthopedic_postop",
+      "match_keywords": ["oxycodone", "tramadol", "hydrocodone", "acetaminophen", "ibuprofen", "enoxaparin", "lovenox", "knee replacement", "hip replacement", "arthroplasty", "fracture", "post-op pain", "fixation"],
+      "inventory": {
+        "oxycodone 5mg": {"in_stock": true, "pa_required": true, "pa_reason": "Controlled — quantity limit 30 tabs / 7 days"},
+        "tramadol 50mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 6},
+        "acetaminophen 500mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "enoxaparin 40mg syringe": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 22}
+      },
+      "narrative": "Oxycodone has CDC-mandated quantity limits (30 tabs / 7 days). Tramadol and acetaminophen multimodal regimen recommended. Enoxaparin DVT prophylaxis stocked."
+    },
+    {
+      "id": "diabetes_titration",
+      "match_keywords": ["metformin", "insulin", "glargine", "lantus", "lispro", "humalog", "empagliflozin", "jardiance", "semaglutide", "ozempic", "diabetes", "type 2", "type 1", "hyperglycemia", "dka", "hba1c"],
+      "inventory": {
+        "metformin 1000mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "insulin glargine 100u/ml": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 35},
+        "insulin lispro 100u/ml": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 30},
+        "empagliflozin 10mg": {"in_stock": true, "pa_required": true, "pa_reason": "Tier 3 — A1C >7 documented required"},
+        "semaglutide 1mg pen": {"in_stock": false, "backorder_until": "2026-06-10", "pa_required": true, "pa_reason": "National shortage; PA + step therapy required when restocked"}
+      },
+      "narrative": "Semaglutide on backorder due to national shortage. Empagliflozin requires A1C >7 documentation. Standard insulin and metformin regimen available."
+    },
+    {
+      "id": "respiratory_copd",
+      "match_keywords": ["albuterol", "tiotropium", "spiriva", "fluticasone", "salmeterol", "advair", "prednisone", "azithromycin", "copd", "asthma", "bronchitis", "exacerbation", "emphysema"],
+      "inventory": {
+        "albuterol HFA 90mcg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 22},
+        "tiotropium 18mcg DPI": {"in_stock": true, "pa_required": true, "pa_reason": "Step therapy — long-acting bronchodilator trial required"},
+        "fluticasone-salmeterol 250-50mcg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 45},
+        "prednisone 20mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 5},
+        "azithromycin 250mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8}
+      },
+      "narrative": "Tiotropium requires step-therapy auth. Albuterol rescue, fluticasone-salmeterol maintenance, and prednisone burst available without PA."
+    },
+    {
+      "id": "oncology_supportive",
+      "match_keywords": ["ondansetron", "zofran", "dexamethasone", "morphine", "lorazepam", "ativan", "filgrastim", "neupogen", "pegfilgrastim", "chemotherapy", "neutropenia", "antiemetic", "cancer", "malignancy"],
+      "inventory": {
+        "ondansetron 8mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 12},
+        "dexamethasone 4mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 5},
+        "morphine ER 15mg": {"in_stock": true, "pa_required": true, "pa_reason": "Controlled — pain management plan on file required"},
+        "lorazepam 0.5mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8},
+        "filgrastim 300mcg syringe": {"in_stock": false, "backorder_until": "2026-05-20", "pa_required": true, "pa_reason": "Specialty injectable — ANC documentation required"}
+      },
+      "narrative": "Filgrastim on backorder; pegfilgrastim recommended as alternative. Standard antiemetics stocked. Morphine ER requires pain management plan."
+    },
+    {
+      "id": "mental_health",
+      "match_keywords": ["sertraline", "zoloft", "fluoxetine", "prozac", "quetiapine", "seroquel", "olanzapine", "zyprexa", "trazodone", "depression", "anxiety", "bipolar", "schizophrenia", "psychiatric"],
+      "inventory": {
+        "sertraline 50mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "quetiapine 100mg": {"in_stock": true, "pa_required": true, "pa_reason": "Tier 3 — psychiatry consult documentation required"},
+        "trazodone 50mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 6},
+        "lorazepam 1mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 8}
+      },
+      "narrative": "Quetiapine requires psychiatry consult documentation for Tier 3 auth. Sertraline, trazodone, lorazepam available without PA."
+    },
+    {
+      "id": "geriatric_polypharmacy",
+      "match_keywords": ["polypharmacy", "geriatric", "elderly", "atorvastatin", "lipitor", "rosuvastatin", "amlodipine", "norvasc", "omeprazole", "donepezil", "aricept", "memantine", "namenda", "alzheimer", "dementia"],
+      "inventory": {
+        "atorvastatin 40mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "amlodipine 10mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "omeprazole 20mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 6},
+        "donepezil 10mg": {"in_stock": true, "pa_required": true, "pa_reason": "MMSE/MoCA score documentation required"},
+        "memantine 10mg": {"in_stock": true, "pa_required": true, "pa_reason": "Step therapy — donepezil trial required"}
+      },
+      "narrative": "Polypharmacy review recommended. Donepezil and memantine require cognitive assessment documentation. Statin and BP regimen stocked without PA."
+    },
+    {
+      "id": "general_default",
+      "match_keywords": [],
+      "is_default": true,
+      "inventory": {
+        "acetaminophen 500mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "ibuprofen 400mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "amoxicillin 500mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 6},
+        "lisinopril 10mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4},
+        "atorvastatin 20mg": {"in_stock": true, "pa_required": false, "copay_estimate_usd": 4}
+      },
+      "narrative": "General formulary — common discharge medications available without PA. Specialty items may require benefits investigation; please specify medication and indication."
     }
   ]
 }

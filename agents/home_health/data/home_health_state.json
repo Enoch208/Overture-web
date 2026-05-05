@@ -2,13 +2,27 @@
   "organization": {
     "name": "Beacon Home Health Services",
     "npi": "1932074521",
-    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127", "02130", "02132"],
-    "services_offered": ["postpartum_visit", "bp_monitoring", "lactation_support", "wound_care", "dme_delivery", "skilled_nursing"]
+    "service_area_zips": ["02118", "02119", "02120", "02121", "02124", "02125", "02127", "02130", "02132", "02134"],
+    "services_offered": [
+      "postpartum_visit",
+      "bp_monitoring",
+      "lactation_support",
+      "wound_care",
+      "dme_delivery",
+      "skilled_nursing",
+      "physical_therapy",
+      "occupational_therapy",
+      "respiratory_therapy",
+      "diabetic_education",
+      "infusion_therapy",
+      "medication_adherence_check"
+    ]
   },
   "scenarios": [
     {
-      "id": "afternoon_only",
-      "narrative": "Service area covered. Same-day BP cuff delivery available, but only in a 4–6 PM window. Postpartum nurse visit available within 24h.",
+      "id": "postpartum_recovery",
+      "match_keywords": ["postpartum", "lactation", "preeclampsia", "newborn", "puerperium", "bp_monitoring", "blood pressure"],
+      "narrative": "Postpartum recovery scenario. Same-day BP cuff delivery, afternoon-only window. Postpartum nurse and lactation visits within 48h.",
       "windows": [
         {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-05T16:00:00Z", "latest": "2026-05-05T18:00:00Z"},
         {"service": "postpartum_visit", "earliest": "2026-05-06T09:00:00Z", "latest": "2026-05-06T17:00:00Z"},
@@ -17,22 +31,101 @@
       "caseload_status": "available"
     },
     {
-      "id": "next_day_only",
-      "narrative": "Same-day capacity exhausted. Next-day delivery and visit available. Out-of-area zips referred to partner agency.",
+      "id": "cardiac_telemetry",
+      "match_keywords": ["heart failure", "cardiomyopathy", "afib", "atrial fibrillation", "telemetry", "weight monitoring", "cardiac", "hfref", "hfpef", "cardiac_rehab"],
+      "narrative": "Cardiac home telemetry. Same-day weight scale + BP cuff delivery; cardiac RN visit within 48h. Cardiac rehab referral recommended.",
       "windows": [
-        {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-06T14:00:00Z"},
-        {"service": "postpartum_visit", "earliest": "2026-05-06T13:00:00Z", "latest": "2026-05-06T18:00:00Z"}
+        {"service": "dme_delivery", "device": "wireless weight scale + BP cuff", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T19:00:00Z"},
+        {"service": "skilled_nursing", "earliest": "2026-05-06T10:00:00Z", "latest": "2026-05-07T16:00:00Z"},
+        {"service": "medication_adherence_check", "earliest": "2026-05-07T09:00:00Z", "latest": "2026-05-14T16:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "wound_care",
+      "match_keywords": ["wound", "dressing change", "post-op", "incision", "ulcer", "stage 3", "stage 4", "pressure injury", "surgical wound"],
+      "narrative": "Wound care service. RN dressing changes q48h x 14 days. Same-day delivery of wound supplies (silver alginate, hydrocolloid).",
+      "windows": [
+        {"service": "dme_delivery", "device": "wound dressing kit (silver alginate, hydrocolloid)", "earliest": "2026-05-05T13:00:00Z", "latest": "2026-05-05T19:00:00Z"},
+        {"service": "wound_care", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-19T16:00:00Z"},
+        {"service": "skilled_nursing", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-06T16:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "rehab_pt_ot",
+      "match_keywords": ["physical therapy", "occupational therapy", "knee replacement", "hip replacement", "stroke", "cva", "rehab", "arthroplasty", "fracture", "fall risk"],
+      "narrative": "Home rehabilitation. PT 3x/week, OT 2x/week. DME walker/commode same-day. PT eval within 72h.",
+      "windows": [
+        {"service": "dme_delivery", "device": "rolling walker + bedside commode", "earliest": "2026-05-05T13:00:00Z", "latest": "2026-05-05T19:00:00Z"},
+        {"service": "physical_therapy", "earliest": "2026-05-07T09:00:00Z", "latest": "2026-05-21T17:00:00Z"},
+        {"service": "occupational_therapy", "earliest": "2026-05-08T10:00:00Z", "latest": "2026-05-21T15:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "respiratory_oxygen",
+      "match_keywords": ["copd", "oxygen", "o2", "nebulizer", "asthma", "respiratory", "bipap", "cpap", "exacerbation", "emphysema"],
+      "narrative": "Home oxygen setup. Concentrator delivery same-day; nebulizer + spacer training within 48h. Respiratory therapist visits scheduled.",
+      "windows": [
+        {"service": "dme_delivery", "device": "oxygen concentrator + portable tanks + nebulizer", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T20:00:00Z"},
+        {"service": "respiratory_therapy", "earliest": "2026-05-06T10:00:00Z", "latest": "2026-05-13T16:00:00Z"},
+        {"service": "skilled_nursing", "earliest": "2026-05-07T09:00:00Z", "latest": "2026-05-07T15:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "diabetes_coaching",
+      "match_keywords": ["diabetes", "insulin", "glucometer", "cgm", "dexcom", "freestyle libre", "diabetic education", "hypoglycemia", "type 1", "type 2", "hba1c"],
+      "narrative": "Diabetes home coaching. CGM + glucometer delivery same-day; diabetic educator visit within 72h. Insulin titration nurse visits 2x/week.",
+      "windows": [
+        {"service": "dme_delivery", "device": "FreeStyle Libre CGM + glucometer kit + lancets", "earliest": "2026-05-05T13:00:00Z", "latest": "2026-05-05T19:00:00Z"},
+        {"service": "diabetic_education", "earliest": "2026-05-08T10:00:00Z", "latest": "2026-05-15T16:00:00Z"},
+        {"service": "skilled_nursing", "earliest": "2026-05-06T09:00:00Z", "latest": "2026-05-13T17:00:00Z"}
+      ],
+      "caseload_status": "available"
+    },
+    {
+      "id": "infusion_therapy",
+      "match_keywords": ["infusion", "iv antibiotics", "vancomycin", "ceftriaxone", "tpn", "home infusion", "picc"],
+      "narrative": "Home infusion service. PICC line care nurse visits daily x 7 days. Pump and supplies delivered same-day. Caseload limited to inner-corridor zips.",
+      "windows": [
+        {"service": "dme_delivery", "device": "infusion pump + line kit + sharps container", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T18:00:00Z"},
+        {"service": "infusion_therapy", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-13T20:00:00Z"},
+        {"service": "skilled_nursing", "earliest": "2026-05-06T08:00:00Z", "latest": "2026-05-13T16:00:00Z"}
+      ],
+      "caseload_status": "limited"
+    },
+    {
+      "id": "behavioral_support",
+      "match_keywords": ["depression", "anxiety", "psych", "behavioral", "medication adherence", "schizophrenia", "bipolar", "psychiatric"],
+      "narrative": "Behavioral health home support. Psych RN weekly visits + medication adherence checks. No same-day capacity for crisis intervention; refer crisis to community mental health center.",
+      "windows": [
+        {"service": "skilled_nursing", "earliest": "2026-05-08T10:00:00Z", "latest": "2026-05-22T16:00:00Z"},
+        {"service": "medication_adherence_check", "earliest": "2026-05-08T10:00:00Z", "latest": "2026-05-22T16:00:00Z"}
       ],
       "caseload_status": "limited"
     },
     {
       "id": "out_of_area",
-      "narrative": "Patient zip outside primary service area. Referral to partner agency required for in-home services. DME can still be couriered same-day.",
+      "match_keywords": ["out of area", "out-of-area", "courier only", "outside service area"],
+      "narrative": "Patient ZIP outside primary service area. Referral to partner agency required for in-home services. DME can still be couriered same-day.",
       "windows": [
-        {"service": "dme_delivery", "device": "automated bp cuff", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T20:00:00Z"}
+        {"service": "dme_delivery", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T20:00:00Z"}
       ],
       "caseload_status": "referral_required",
       "partner_agency": "Crescent Home Care Network"
+    },
+    {
+      "id": "general_default",
+      "match_keywords": [],
+      "is_default": true,
+      "narrative": "General home health support. Standard nursing visits and DME delivery available within service area. Service mix follows physician orders.",
+      "windows": [
+        {"service": "skilled_nursing", "earliest": "2026-05-06T09:00:00Z", "latest": "2026-05-13T17:00:00Z"},
+        {"service": "dme_delivery", "earliest": "2026-05-05T14:00:00Z", "latest": "2026-05-05T20:00:00Z"}
+      ],
+      "caseload_status": "available"
     }
   ]
 }
