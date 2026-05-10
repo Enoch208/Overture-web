@@ -41,7 +41,8 @@ def _load_valid_api_keys() -> set[str]:
     if raw_keys:
         keys.update(k.strip() for k in raw_keys.split(",") if k.strip())
 
-    for env_name in ("API_KEY_PRIMARY", "API_KEY_SECONDARY"):
+    for env_name in ("API_KEY_PRIMARY", "API_KEY_SECONDARY",
+                      "ORCHESTRATOR_API_KEY", "PHARMACY_API_KEY", "HOME_HEALTH_API_KEY"):
         value = os.getenv(env_name, "").strip()
         if value:
             keys.add(value)

@@ -8,7 +8,7 @@ from google.adk.tools import ToolContext
 logger = logging.getLogger(__name__)
 
 _STATE_PATH = Path(__file__).resolve().parents[1] / "data" / "home_health_state.json"
-_STATE = json.loads(_STATE_PATH.read_text())
+_STATE = json.loads(_STATE_PATH.read_text(encoding="utf-8"))
 
 
 def _default_scenario_id() -> str:
