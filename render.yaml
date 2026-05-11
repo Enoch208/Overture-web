@@ -92,7 +92,7 @@ services:
       - key: AGENT_MODULE
         value: agents.orchestrator.app:a2a_app
       - key: ORCHESTRATOR_URL
-        value: https://overture-orchestrator.onrender.com
+        value: https://overture-fgv2.onrender.com
       - key: PHARMACY_URL
         value: https://overture-pharmacy.onrender.com
       - key: HOME_HEALTH_URL
