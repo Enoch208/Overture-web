@@ -1,0 +1,113 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Careplan MCP server (FHIR tooling exposed to the orchestrator)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: overture-careplan-mcp
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./mcp/careplan_composer/Dockerfile
+    dockerContext: ./mcp/careplan_composer
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+
+  # ---------------------------------------------------------------------------
+  # 2. Pharmacy A2A agent
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: overture-pharmacy
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: AGENT_MODULE
+        value: agents.pharmacy.app:a2a_app
+      - key: PHARMACY_URL
+        value: https://overture-pharmacy.onrender.com
+      - key: PHARMACY_MODEL
+        value: openai/gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: PHARMACY_API_KEY
+        sync: false
+      - key: API_KEYS
+        sync: false
+
+  # ---------------------------------------------------------------------------
+  # 3. Home Health A2A agent
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: overture-home-health
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: AGENT_MODULE
+        value: agents.home_health.app:a2a_app
+      - key: HOME_HEALTH_URL
+        value: https://overture-home-health.onrender.com
+      - key: HOME_HEALTH_MODEL
+        value: openai/gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: HOME_HEALTH_API_KEY
+        sync: false
+      - key: API_KEYS
+        sync: false
+
+  # ---------------------------------------------------------------------------
+  # 4. Orchestrator A2A agent (talks to the three above)
+  # Recommended: upgrade this one to "starter" so the demo entry point
+  # does not cold-start.
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: overture-orchestrator
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: AGENT_MODULE
+        value: agents.orchestrator.app:a2a_app
+      - key: ORCHESTRATOR_URL
+        value: https://overture-orchestrator.onrender.com
+      - key: PHARMACY_URL
+        value: https://overture-pharmacy.onrender.com
+      - key: HOME_HEALTH_URL
+        value: https://overture-home-health.onrender.com
+      - key: CAREPLAN_MCP_URL
+        value: https://overture-careplan-mcp.onrender.com
+      - key: ORCHESTRATOR_MODEL
+        value: openai/gpt-4o
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ORCHESTRATOR_API_KEY
+        sync: false
+      - key: PHARMACY_API_KEY
+        sync: false
+      - key: HOME_HEALTH_API_KEY
+        sync: false
+      - key: API_KEYS
+        sync: false
