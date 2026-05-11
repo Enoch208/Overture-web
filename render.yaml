@@ -10,7 +10,6 @@ services:
     branch: main
     dockerfilePath: ./mcp/careplan_composer/Dockerfile
     dockerContext: ./mcp/careplan_composer
-    healthCheckPath: /
     autoDeploy: true
     envVars:
       - key: PORT
@@ -92,7 +91,7 @@ services:
       - key: AGENT_MODULE
         value: agents.orchestrator.app:a2a_app
       - key: ORCHESTRATOR_URL
-        value: https://overture-fgv2.onrender.com
+        value: https://overture-orchestrator.onrender.com
       - key: PHARMACY_URL
         value: https://overture-pharmacy.onrender.com
       - key: HOME_HEALTH_URL
